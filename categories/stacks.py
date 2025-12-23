@@ -198,16 +198,18 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
     stack = [] # store days
 
     # we need to iterate through temperatures
-    # while getting bot the index and the value
+    # while getting both the index and the value
     for day, temp in enumerate(temperatures):
         # while stack is not empty (stack is True)
-        # and temperature is higher than the temperature
-        # of the last day stored in the stack
+        # and temperature is higher than the 
+        # temperature of the last day stored in the stack
+        # temp > temperatures[last day stored in the stack]
         while stack and temp > temperatures[stack[-1]]:
             # pop() not only removes the last element
             # it also returns WHAT was the element removed
             prev_day = stack.pop()
-            # how many days passed
+            # how many days passed = current day - previous day
             answer[prev_day] = day - prev_day
+        # add the current day to the stack until we find a warmer one
         stack.append(day)
     return answer
