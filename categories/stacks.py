@@ -162,9 +162,52 @@ class MinStack:
     
 # DAILY TEMPERATURES (Monotonic Stack)
 '''
-A monotonic stack is a stack where the elements are always sorted (either increasing or decreasing).
+A monotonic stack is a stack where the elements are always sorted 
+(either increasing or decreasing).
 
-If you see a new number that breaks the order, you pop elements until the order is restored.
+If you see a new number that breaks the order, 
+you pop elements until the order is restored.
 
-The Magic: The moment you pop an element is the moment you find the answer for that specific element.
+The Magic: The moment you pop an element 
+is the moment you find the answer for that specific element.
+=============================================================================
+The Challenge
+Given an array of integers temperatures represents the daily temperatures,
+return an array answer such that answer[i] is the number of days you have to wait
+after the i-th day to get a warmer temperature. 
+If there is no future day for which this is possible, keep answer[i] == 0.
+
+Example
+Input: temperatures = [73, 74, 75, 71, 69, 72, 76, 73]
+Output: [1, 1, 4, 2, 1, 1, 0, 0]
+
+Breakdown of the Example:
+Day 0 (73): Next warmer is Day 1 (74). Wait: 1 day.
+Day 1 (74): Next warmer is Day 2 (75). Wait: 1 day.
+Day 2 (75): Next warmer is Day 6 (76). Wait: 4 days.
+Day 3 (71): Next warmer is Day 5 (72). Wait: 2 days.
+...and so on.
 '''
+
+def daily_temperatures(temperatures: list[int]) -> list[int]:
+    # answer is the number of days you have to wait
+    # after the i-th day to get a warmer temp.
+    # if there's no future day for which this is possible,
+    # keep answer[i] == 0
+    answer = [0] * len(temperatures)
+    stack = [] # store days
+
+    # we need to iterate through temperatures
+    # while getting bot the index and the value
+    for day, temp in enumerate(temperatures):
+        # while stack is not empty (stack is True)
+        # and temperature is higher than the temperature
+        # of the last day stored in the stack
+        while stack and temp > temperatures[stack[-1]]:
+            # pop() not only removes the last element
+            # it also returns WHAT was the element removed
+            prev_day = stack.pop()
+            # how many days passed
+            answer[prev_day] = day - prev_day
+        stack.append(day)
+    return answer
