@@ -59,8 +59,82 @@ class MovingAverageSenior:
         return self.window_sum / len(self.queue)
         
     
-movingAverageSenior = MovingAverageSenior(3)
-movingAverageSenior.double_next(1)
-movingAverageSenior.double_next(10)
-movingAverageSenior.double_next(3)
-print(movingAverageSenior.double_next(8))
+# movingAverageSenior = MovingAverageSenior(3)
+# movingAverageSenior.double_next(1)
+# movingAverageSenior.double_next(10)
+# movingAverageSenior.double_next(3)
+# print(movingAverageSenior.double_next(8))
+
+# IMPLEMENT STACK USING QUEUES
+'''
+You need to implement a LIFO (Last-In-First-Out) Stack class, but you must strictly use FIFO (First-In-First-Out) Queues to build it.
+
+In Python, you can use deque, but you are only allowed to use queue operations:
+
+append() (push to back)
+popleft() (peek/pop from front)
+len() (size)
+
+You cannot use pop() (which pops from the back) or index access [i].
+
+Requirements: 
+Implement the MyStack class:
+void push(int x): Pushes element x to the top of the stack.
+int pop(): Removes the element on the top of the stack and returns it.
+int top(): Returns the element on the top of the stack.
+boolean empty(): Returns true if the stack is empty, false otherwise.
+
+Visualizing the Conflict:
+Stack (Goal): You push 1, 2. If you pop, you expect 2.
+Queue (Tool): You push 1, 2. If you popleft, you get 1.
+
+Hint: How can you manipulate the queue so that the last thing you added becomes the first thing to come out?
+'''
+
+# deque already been imported in line 43
+# allowed: append, popleft, len
+
+class MyStack:
+    def __init__(self):
+        self.queue = deque()
+        
+    def void_push(self, val: int) -> None:
+        # this function must append to the last index and rotate
+        # (cannot use appendleft())
+        self.queue.append(val)
+
+        # rotate value (n-1) times, where n is the current len
+        for index in range(len(self.queue) - 1):
+            # remove from front
+            reallocate_val = self.queue.popleft()
+            # add to back
+            self.queue.append(reallocate_val)
+
+    def int_pop(self) -> int:
+        # popleft() must remove the LAST index from
+        # stack (rotate queue)
+        error_message = 'Stack is empty. Cannot pop element.'
+        return self.queue.popleft() if self.queue else error_message
+        
+    def int_top(self) -> int:
+        # unpack the first value from stack
+        # *_ means catch all remaining elements of the list
+        # but ignore them all, except 'first_element'
+        if self.queue:
+            first_element, *_ = self.queue
+            return first_element
+        else:
+            return 'Stack is empty. Cannot return the top element.'
+        
+    def boolean_empty(self) -> bool:
+        # returns true if the list is empty
+        # or return len(self.queue) == 0
+        return not self.queue
+
+my_stack = MyStack()
+my_stack.void_push(1)
+my_stack.void_push(2)
+my_stack.void_push(3)
+print(my_stack.int_pop()) # -> expected to return 3!
+print(my_stack.int_top()) # -> expected to return 2 (3 has been poped)!
+print(my_stack.boolean_empty()) # -> expected to return False
