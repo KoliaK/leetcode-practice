@@ -197,11 +197,11 @@ class RecentCounter:
         # return how many requests were made in the past 3000ms
         return len(self.requests)
 
-counter = RecentCounter()
-print(counter.ping(1))    # requests: [1], range: [-2999, 1], return: 1
-print(counter.ping(100))  # requests: [1, 100], range: [-2900, 100], return: 2
-print(counter.ping(3001)) # requests: [1, 100, 3001], range: [1, 3001], return: 3
-print(counter.ping(3002)) # requests: [1, 100, 3001, 3002], range: [2, 3002], return: 3
-                   # ^ Note: '1' is now older than 3000ms ago
-                   # (3002 - 3000 = 2), so '1' drops off.
+# counter = RecentCounter()
+# print(counter.ping(1))    # requests: [1], range: [-2999, 1], return: 1
+# print(counter.ping(100))  # requests: [1, 100], range: [-2900, 100], return: 2
+# print(counter.ping(3001)) # requests: [1, 100, 3001], range: [1, 3001], return: 3
+# print(counter.ping(3002)) # requests: [1, 100, 3001, 3002], range: [2, 3002], return: 3
+#                    # ^ Note: '1' is now older than 3000ms ago
+#                    # (3002 - 3000 = 2), so '1' drops off.
             
