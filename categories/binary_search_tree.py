@@ -98,3 +98,102 @@ class Solution:
 # result = sol.rangeSumBST(root, 7, 15)
 
 # print(f"Calculated Sum: {result}")
+
+# SEARCH IN A BST
+'''
+You are given the root of a BST and an integer val. Find the node in the BST that the node's value equals val and return the subtree rooted with that node. If such a node does not exist, return None.
+
+Example:
+Tree: Same as before (Root 10, Left 5, Right 15...)
+Target val: 15
+
+Output: You return the entire Node object for 15. (In the background, this includes the link to 18).
+'''
+# with recursion
+def searchBST(root: TreeNode, target: int) -> TreeNode:
+    if root is None:
+        return None
+    
+    if target > root.val:
+        return searchBST(root.right, target)
+    elif target < root.val:
+        return searchBST(root.left, target)
+    else:
+        return root.val
+
+# with iteration
+def searchBST(self, root: TreeNode, val: int) -> TreeNode:
+    while root is not None:
+        
+        if root.val == val:
+            return root
+        
+        elif val > root.val:
+            root = root.right
+        
+        else:
+            root = root.left
+            
+    # if the loop finishes, we hit a dead end (None).
+    return None
+
+# tests
+
+# build the tree
+# root = TreeNode(10)
+# root.left = TreeNode(5)
+# root.right = TreeNode(15)
+
+# root.left.left = TreeNode(3)
+# root.left.right = TreeNode(7)
+
+# root.right.right = TreeNode(18)
+
+# # if the target is 15.
+# # expected node to returm: 15
+# result = searchBST(root, 15)
+
+# print(f"Target node: {result}")
+
+# VALIDATE BST
+'''
+Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+The Catch:It's not enough to just check if Left < Node < Right.
+
+Example:
+Root: 10
+Right Child: 15
+Right-Left Grandchild: 9
+Is this valid? 
+
+At node 15, the left child is 9. Since 9 < 15, that looks okay locally.
+BUT: Node 9 is on the Right side of the main Root (10). Everything on the right side of 10 must be greater than 10.Since 9 < 10, this tree is Invalid.
+'''
+
+# root.right.left must be < than root.right but > root
+
+def is_valid_BST(root: TreeNode) -> bool:
+    # start with no limits (infinity)
+    return node_validator(root, float('-inf'), float('inf'))
+
+def node_validator(node: TreeNode, low: float, high: float) -> bool:
+
+    # this time, we are not validating
+    # if the node is empty
+    if node is None:
+        return True # <--- if hits the bottom, then it's a valid tree
+
+    # if the current node is higher than
+    # low and lower than high
+    # if low > node.val > high:
+    if not (low < node.val < high):
+        return False
+    
+    # if left is valid, max limit becomes current node.val
+    left_is_valid = node_validator(node.left, low, node.val)
+    # if right is valid, min limit becomes current node.val 
+    right_is_valid = node_validator(node.right, node.val, high)
+
+    # return true ONLY if both sides are valid
+    return left_is_valid and right_is_valid
