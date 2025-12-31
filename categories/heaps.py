@@ -34,7 +34,7 @@ def kth_largest_element(arr : list[int], k : int) -> int:
 # print(kth_largest_element([3,2,1,5,6,4], 2))
 
 # SAME PROBLEM, BUT WITH MIN-HEAP APPROACH
-import heapq
+import heapq # use O(log n) insertion/deletion procedures on priority queues
 
 def min_heap_largest_element(nums : list[int], k : int) -> int:
     # initialize an empty heap
@@ -42,9 +42,14 @@ def min_heap_largest_element(nums : list[int], k : int) -> int:
     
     for num in nums:
         if len(heap) < k:
+            # if the heap hasn't reached size k, just push
             heapq.heappush(heap, num)
         else:
+            # if heap is full, push the new num, and pop the smallest
+            # ONLY if he new num is larger than the smallest in the heap
             heapq.heappushpop(heap, num)
+    # return final heap after the loop
     return heap[0]
 
-print(min_heap_largest_element([3,2,1,5,6,4], 2))
+# print(min_heap_largest_element([3,2,1,5,6,4], 2))
+
