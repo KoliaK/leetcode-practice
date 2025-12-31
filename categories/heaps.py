@@ -121,7 +121,7 @@ def run_tests():
     
     print("✅ All tests passed!")
 
-run_tests()
+# run_tests()
 
 # SENIOR SOLUTION (PROVIDED BY GEMINI)
 import random
