@@ -139,4 +139,108 @@ class Solution:
         self.sink_island(grid, r, c + 1, rows, cols) # right
         self.sink_island(grid, r, c - 1, rows, cols) # left
 
+# FLOOD COLOR FILL
+'''
+You are given an image represented by an m x n grid of integers image,
+where image[i][j] represents the pixel value (color) of the image.
+
+You are also given three integers:
+- sr, sc: The starting row and column of the pixel you clicked on.
+- color: The new color you want to paint the region.
+
+The Task Perform a "flood fill". This means:
+1. Take the starting pixel.
+2. Change its color to the new color.
+3. Do the same for any 4-directionally connected pixels that have the same
+color as the starting pixel originally had.
+
+Return the modified image.
+
+EXAMPLE:
+Input:
+image = [[1,1,1],
+         [1,1,0],
+         [1,0,1]]
+sr = 1, sc = 1, newColor = 2
+
+Output: 
+[[2,2,2],
+ [2,2,0],
+ [2,0,1]]
+'''
+# this function will scan the cell coordinate for valid colors
+def pixel_scanner(grid : list[list[str]], sr : int, sc : int, new_color : str) -> list[list[str]]:
+    
+    if not grid:
+        return 'Grid is empty.'
+    
+    rows, cols = len(grid), len(grid[0])
+
+    original_color = grid[sr][sc]
+
+    if original_color == new_color:
+        return f'This is already {new_color}'
+    
+    color_filler(grid, sr, sc, rows, cols, original_color, new_color)
+        
+    return grid
+    
+
+# this function will fill up the current cell and all its neighbors 
+def color_filler(grid, sr, sc, rows, cols, original_color, new_color):
+
+    # out of bounds checker or same color
+    if not(0 <= sr < rows and 0 <= sc < cols) or grid[sr][sc] != original_color:
+        return
+    
+    grid[sr][sc] = new_color
+
+    # DOWN
+    color_filler(grid, sr + 1, sc, rows, cols, original_color, new_color)
+    # UP
+    color_filler(grid, sr - 1, sc, rows, cols, original_color, new_color)
+    # RIGHT
+    color_filler(grid, sr, sc + 1, rows, cols, original_color, new_color)
+    # LEFT
+    color_filler(grid, sr, sc - 1, rows, cols, original_color, new_color)
+
+# TEST
+image = [[1,1,1],
+         [1,1,0],
+         [1,0,1]]
+# print(pixel_scanner(image, 0, 0, 2)) 
+# Expected Output: 
+# [[2,2,2],
+#  [2,2,0],
+#  [2,0,1]]
+    
+# SENIOR APPROACH (BY GEMINI)
+
+def floodFill(self, image: list[list[str]], sr: int, sc: int, color: int) -> list[list[str]]:
+    # 1. Capture basic data
+    rows, cols = len(image), len(image[0])
+    original_color = image[sr][sc]
+    
+    # 2. Edge Case: If colors are the same, do nothing
+    if original_color == color:
+        return image
+    
+    # 3. Define Helper INSIDE (Closure)
+    def fill(r, c):
+        # Base Case: Bounds check OR wrong color
+        if not (0 <= r < rows and 0 <= c < cols) or image[r][c] != original_color:
+            return
+        
+        # Action: Paint
+        image[r][c] = color
+        
+        # Recurse
+        fill(r+1, c)
+        fill(r-1, c)
+        fill(r, c+1)
+        fill(r, c-1)
+    
+    # 4. Trigger the recursion
+    fill(sr, sc)
+    return image
 
