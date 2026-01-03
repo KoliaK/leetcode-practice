@@ -122,7 +122,7 @@ def first_unique_char_alternative(s: str) -> int:
     return -1
 
 s = "loveleetcode" # -> 2
-print(first_unique_char_alternative(s))
+# print(first_unique_char_alternative(s))
 
 # SENIOR APPROACH WITH COUNTER MODULE (By Gemini)
 from collections import Counter
@@ -141,5 +141,56 @@ def first_unique_char(s: str) -> int:
     for idx, char in enumerate(s):
         if count[char] == 1:
             return idx
-    
+
     return -1
+
+# INTERSECTION OF TWO ARRAYS
+'''
+Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and you may return the result in any order.
+
+EXAMPLE 1:
+    Input: nums1 = [1, 2, 2, 1], nums2 = [2, 2]
+    Output: [2]
+EXAMPLE 2:
+    Input: nums1 = [4, 9, 5], nums2 = [9, 4, 9, 8, 4]
+    Output: [9, 4] (or [4, 9])
+'''
+# loop approach
+def array_intersection(arr_a: list[int], arr_b: list[int]) -> list[int]:
+    arr_a = set(arr_a)
+    arr_b = set(arr_b)
+    result = []
+    for i in arr_a:
+        if i in arr_b:
+            result.append(i)
+    return result
+        
+# nums1 = [1, 2, 2, 1]
+# nums2 = [2, 2]
+# Output: [2]
+
+
+nums1 = [4, 9, 5] 
+nums2 = [9, 4, 9, 8, 4]
+# Output: [9, 4] (or [4, 9])
+
+# print(array_intersection(nums1, nums2))
+
+# set operator approach
+def array_set_intersection(arr_a: list[int], arr_b: list[int]) -> list[int]:
+    arr_a = set(arr_a)
+    arr_b = set(arr_b)
+
+    # return everything that is in both sets
+    return list(arr_a & arr_b)
+        
+# nums1 = [1, 2, 2, 1]
+# nums2 = [2, 2]
+# Output: [2]
+
+
+nums1 = [4, 9, 5] 
+nums2 = [9, 4, 9, 8, 4]
+# Output: [9, 4] (or [4, 9])
+
+print(array_set_intersection(nums1, nums2))
