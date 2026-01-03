@@ -244,3 +244,95 @@ def floodFill(self, image: list[list[str]], sr: int, sc: int, color: int) -> lis
     fill(sr, sc)
     return image
 
+# FIND THE TOWN JUDGE
+'''
+In a town, there are n people labeled from 1 to n. There is a rumor that one of these people is secretly the town judge.
+
+If the town judge exists, then:
+1. The town judge trusts nobody.
+2. Everybody (except the town judge) trusts the town judge.
+3. There is exactly one person that satisfies properties 1 and 2.
+
+You are given an array trust where trust[i] = [a, b] represents that the person labeled a trusts the person labeled b.
+
+Your Task: Return the label of the town judge if the town judge exists and can be identified, or return -1 otherwise.
+
+EXAMPLE 1:
+Input: n = 2, trust = [[1,2]]
+Output: 2
+
+EXAMPLE 2:
+Input: n = 3, trust = [[1,3], [2,3]]
+Output: 3
+
+EXAMPLE 3:
+Input: n = 3, trust = [[1,3], [2,3], [3,1]]
+Output: -1
+(Here, person 3 trusts person 1, so person 3 cannot be the judge because the judge trusts nobody.)
+'''
+
+def find_the_judge(n : int, trust : list[list[int]]) -> int:
+    # prefilled lists
+    # n + 1 because n is the number of people, so we need 1 more index
+    # if n = 3, we have 3 people but the list indexes would be 0, 1, 2
+    # if n + 1 is used, the list will have 4 indexes and we can ignore [0]
+    trusts_given = [0] * (n + 1)
+    trusted_by = [0] * (n + 1)
+
+    # for trustee and trusted person in trust
+    for a, b in trust:
+        # get the person and GIVE one vote of trust in the
+        # relative index, if a = 2 -> [0, 0, 1, 0]
+        trusts_given[a] += 1
+        # get the person and RECEIVE one vote of trust in the
+        # respective index if b = 3 -> [0, 0, 0, 1]
+        trusted_by[b] += 1
+    print(f'trusts given {trusts_given}')
+    print(f'trusted by {trusted_by}')
+
+    # n + 1 in range to match the indexes of trusted_by
+    for i in range(1, n + 1):
+        # the judge receives votes of everyone except himself
+        # so if n = 3, the judge MUST have 2 votes, that's why n - 1
+        # it also cannot vote for anyone since it is the judge!
+        if trusted_by[i] == n - 1 and trusts_given[i] == 0:
+            return i
+    # no judges found
+    return -1
+            
+# TESTS
+# trust = [[1,2]] # if n = 2 -> 2
+# trust = [[1,3], [2,3]] # if n = 3 -> 3
+# trust = [[1,3], [2,3], [3,1]] # if n = 3 -> -1
+# print(find_the_judge(3, trust))
+
+# SENIOR APPROACH (By Gemini):
+def find_judge(n: int, trust: list[list[int]]) -> int:
+    # if there's only 1 person, he's obviously the judge
+    if n == 1 and not trust:
+        return 1
+    
+    # single array to track the votes
+    trust_scores = [0] * (n + 1)
+
+    for trusting, trusted in trust:
+        # the person gives a vote TO someone
+        trust_scores[trusting] -= 1
+        # the person receives a vote FROM someone
+        trust_scores[trusted] += 1
+    print(f'trust scores: {trust_scores}')
+
+    # checks if the person has the 'perfect score' (n - 1)
+    # so if n = 3, trust_scores[i] == 2 -> True
+    # because the judge cannot vote for himself
+    for i in range(1, n + 1):
+        if trust_scores[i] == n - 1:
+            return i
+    # otherwise, there's no judge
+    return -1
+
+# TESTS
+# trust = [[1,2]] # if n = 2 -> 2
+# trust = [[1,3], [2,3]] # if n = 3 -> 3
+# trust = [[1,3], [2,3], [3,1]] # if n = 3 -> -1
+# print(find_judge(3, trust))
