@@ -214,3 +214,69 @@ nums2 = [9, 4, 9, 8, 4]
 
 # print(array_set_intersection(nums1, nums2))
 
+# GROUP ANAGRAMS
+'''
+Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+Note: An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+EXAMPLE 1:
+    Input: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+    Output: [["bat"], ["nat","tan"], ["ate","eat","tea"]]
+EXAMPLE 2:
+    Input: strs = [""]
+    Output: [[""]]
+'''
+
+def group_anagrams(strs: list[str]) -> list[str]:
+    # must group the anagrams in arr together
+    # ['cat', 'dog', 'god'] => ['cat', ['dog', 'god']]
+    result = [] # this will group anagrams together
+    anagrams = {} # this will store the anagrams GROUPS in keys
+
+    # for each word in arr
+    for word in strs:
+        # sort the word and join together
+        # this will be the dict keys
+        sorted_word = ''.join(sorted(word))
+        # if the sorted word (key) is not in the dict
+        if sorted_word not in anagrams:
+            # create a key with the sorted word
+            # and store the original word as a value
+            anagrams[sorted_word] = [word]
+        # if the key is already in the dict
+        else:
+            anagrams[sorted_word].append(word)
+    
+    # push to result each value (group of words) 
+    # that belong to the same key
+    for value in anagrams.values():
+        result.append(value)
+    return result
+
+strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+# returns [['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]
+# print(group_anagrams(strs))
+
+# SENIOR SOLUTION using defaultdict (By Gemini)
+from collections import defaultdict
+
+def group_anagrams(strs: list[str]) -> list[list[str]]:
+    """
+    Groups anagrams using sorted string as the key.
+    Time Complexity: O(N * K log K) where N is number of strings, K is max length of a string.
+    Space Complexity: O(N * K)
+    """
+    # defaultdict(list) means: "If key is missing, create an empty list []"
+    anagram_map = defaultdict(list)
+    
+    for word in strs:
+        # Create the key (same as you did)
+        key = "".join(sorted(word))
+        
+        # No need for 'if/else' checks!
+        anagram_map[key].append(word)
+        
+    # Return the values directly cast to a list
+    return list(anagram_map.values())
+
