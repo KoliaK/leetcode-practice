@@ -157,11 +157,20 @@ EXAMPLE 2:
 '''
 # loop approach
 def array_intersection(arr_a: list[int], arr_b: list[int]) -> list[int]:
+    # transform arrays in sets
+    # to handle duplicates
     arr_a = set(arr_a)
     arr_b = set(arr_b)
+    
+    # whatever the numbers that are present
+    # in both sets will be stored here
     result = []
+
+    # for every number in A
     for i in arr_a:
+        # if also in B
         if i in arr_b:
+            # push to the result list
             result.append(i)
     return result
         
@@ -182,6 +191,16 @@ def array_set_intersection(arr_a: list[int], arr_b: list[int]) -> list[int]:
     arr_b = set(arr_b)
 
     # return everything that is in both sets
+    '''
+    A & B = return everything in common
+        (intersection)
+    A - B = return everything from A that is NOT in B
+        (difference)
+    B - A = return everything from B that is not in A
+        (difference)
+    A ^ B = return everything that is NOT in common
+        (symmetric difference)
+    '''
     return list(arr_a & arr_b)
         
 # nums1 = [1, 2, 2, 1]
@@ -193,4 +212,5 @@ nums1 = [4, 9, 5]
 nums2 = [9, 4, 9, 8, 4]
 # Output: [9, 4] (or [4, 9])
 
-print(array_set_intersection(nums1, nums2))
+# print(array_set_intersection(nums1, nums2))
+
