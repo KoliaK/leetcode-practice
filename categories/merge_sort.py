@@ -46,9 +46,66 @@ def merge_sort(nums1: list[int], nums2: list[int], m: int, n: int) -> None:
             p2 -= 1
         p_write -= 1
     return
-nums1 = [1, 2, 3, 0, 0, 0]
-nums2 = [2, 5, 6]
 
-merge_sort(nums1, nums2, 3, 3)
-print(nums1)
+# nums1 = [1, 2, 3, 0, 0, 0]
+# nums2 = [2, 5, 6]
+# merge_sort(nums1, nums2, 3, 3)
+# print(nums1)
 # expected to return [1, 2, 2, 3, 5, 6]
+
+# MERGE TWO SORTED LISTS
+'''
+You are given the heads of two sorted linked lists, list1 and list2. Task: Merge the two lists into one sorted linked list. The list should be made by splicing together the nodes of the first two lists.
+
+EXAMPLE:
+    Input:
+    list1 = [1, 2, 4]
+    list2 = [1, 3, 4]
+
+    Output:
+    [1, 1, 2, 3, 4, 4]
+'''
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def merge_two_lists(list1: ListNode, list2: ListNode) -> ListNode:
+    # if one of the lists is initially empty,
+    # return the other list
+    if not list1: return list2
+    if not list2: return list1
+
+    dummy_node = ListNode(-1)
+    # this is the last node from the merged list
+    tail = dummy_node
+
+    # this loops runs only while both lists have nodes
+    while list1 and list2:
+        if list1.val < list2.val:
+            # move list1 pointer forward
+            tail.next = list1
+            list1 = list1.next
+        else:
+            # move list2 pointer forward
+            tail.next = list2
+            list2 = list2.next
+        
+        # update the last node position
+        tail = tail.next
+    
+    # if any of the lists is empty
+    # the while loop stops
+
+    # if list1 still has nodes
+    if list1:
+        # connect the rest of the chain
+        tail.next = list1
+    # or if list2 still has nodes
+    elif list2:
+        # connect the rest of the chain
+        tail.next = list2
+    
+    # return the start of the real list (skipping the dummy)
+    return dummy.next
