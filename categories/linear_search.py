@@ -110,9 +110,10 @@ def running_sum(nums: list[int]) -> list[int]:
     # return the refactored list
     return nums
 
-nums = [1, 2, 3, 4] # -> expected [1, 3, 6, 10]
+# TESTS
+# nums = [1, 2, 3, 4] # -> expected [1, 3, 6, 10]
 # nums = [3, 1, 2, 10, 1] # -> expected [3, 4, 6, 16, 17]
-print(running_sum(nums))
+# print(running_sum(nums))
 
 # SENIOR APPROACH (By Gemini)
 def runningSum(nums: list[int]) -> list[int]:
@@ -127,3 +128,51 @@ from itertools import accumulate
 
 def runningSum(nums: list[int]) -> list[int]:
     return list(accumulate(nums))
+
+# FIND THE PIVOT INDEX
+'''
+Given an array of integers nums, calculate the pivot index of this array.
+
+The pivot index is the index where the sum of all the numbers strictly to the left of the index is equal to the sum of all the numbers strictly to the right of the index.
+-If the index is on the left edge (0), the left sum is 0.
+-If the index is on the right edge, the right sum is 0.
+-Return the leftmost pivot index. If no such index exists, return -1.
+
+EXAMPLE 1:
+    Input: nums = [1, 7, 3, 6, 5, 6]
+    Output: 3
+    Explanation:
+    The pivot index is 3.
+    Left sum = nums[0] + nums[1] + nums[2] = 1 + 7 + 3 = 11
+    Right sum = nums[4] + nums[5] = 5 + 6 = 11
+EXAMPLE 2:
+    Input: nums = [1, 2, 3]
+    Output: -1
+    Explanation: No index satisfies the condition.
+
+Hint: 
+Do not use a nested loop (loop inside a loop) to calculate the sum for every index; that would be too slow O(N²).Think about this: You know the total_sum of the array. As you walk through the array from left to right, you can track the current_left_sum.If you know the total_sum and the current_left_sum, can you derive the right_sum using simple subtraction?1
+'''
+
+def index_pivot_finder(nums: list[int]) -> int:
+    total_sum = sum(nums)
+    left_sum = 0
+
+    for i, num in enumerate(nums):
+        # if left sum == right sum of the pivot
+        if left_sum == (total_sum - left_sum - num):
+            return i
+
+        # if not, add the current number to left_sum
+        # for the NEXT iteration
+        left_sum += num
+        
+    # if the loop never meets the conditional
+    # there's no pivot number
+    return -1
+
+# TESTS
+# nums = [1, 7, 3, 6, 5, 6] # 3 because 1+7+3 and 5+6 == 11
+# nums = [1, 2, 3] # -> -1 because no index satisfies the condition
+# nums = [1, 2, 3, 2, 3, 2, 1, 5] # -> 4
+# print(index_pivot_finder(nums))
