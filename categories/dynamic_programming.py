@@ -127,3 +127,58 @@ def minCostClimbingStairs(cost: list[int]) -> int:
     # 3. The "Top" can be reached from the last step (prev1)
     #    or the second-to-last step (prev2)
     return min(prev1, prev2)
+
+# HOUSE ROBBER
+'''
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, represented by an array nums.
+
+The only constraint stopping you is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+
+Example 1:
+    Input: nums = [1, 2, 3, 1] Output: 4 
+    Explanation: 
+        Rob house 1 (money = 1) and then rob house 3 (money = 3). Total amount you can rob = 1 + 3 = 4. Note: You cannot rob house 2 because it is adjacent to house 1.
+Example 2:
+    Input: nums = [2, 7, 9, 3, 1] Output: 12 Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1). Total amount you can rob = 2 + 9 + 1 = 12.
+'''
+
+def house_robber(money: list[int]) -> int:
+    # return the maximum ammount of money
+    # without accessing 2 consecutive values
+
+    prev2 = 0
+    prev1 = 0
+
+    for num in money:
+        # is there more money in current house than the previous 2?
+        current = max(prev1, num + prev2)
+
+        prev2 = prev1
+        prev1 = current
+    return prev1
+
+# SENIOR SOLUTION (By Gemini)
+def rob(nums: list[int]) -> int:
+    # 'rob' = max money if we rob the current house (requires coming from 2 steps back)
+    # 'skip' = max money if we skip the current house (carries over previous max)
+    
+    rob_prev_prev = 0  # equivalent to your prev2
+    rob_prev = 0       # equivalent to your prev1
+    
+    for loot in nums:
+        # Option 1: Don't rob this house. We keep the max loot from the previous step.
+        skip_house = rob_prev
+        
+        # Option 2: Rob this house. Add current loot to the safe loot from 2 steps ago.
+        rob_house = loot + rob_prev_prev
+        
+        # The new max is whichever option yields more money
+        current_max = max(skip_house, rob_house)
+        
+        # Shift our window forward
+        rob_prev_prev = rob_prev
+        rob_prev = current_max
+        
+    return rob_prev
